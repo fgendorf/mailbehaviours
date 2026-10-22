@@ -24,9 +24,9 @@ along with this plugin. If not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------------
  */
 
-define ("PLUGIN_MAILBEHAVIOURS_VERSION", "2.1.2");
-define ("PLUGIN_MAILBEHAVIOURS_MIN_GLPI", "10.0.18");
-define ("PLUGIN_MAILBEHAVIOURS_MAX_GLPI", "10.1");
+define ("PLUGIN_MAILBEHAVIOURS_VERSION", "2.2.0");
+define ("PLUGIN_MAILBEHAVIOURS_MIN_GLPI", "11.0.0");
+define ("PLUGIN_MAILBEHAVIOURS_MAX_GLPI", "11.0.99");
 /**
  * Summary of plugin_init_mailbehaviours
  * Init the hooks of the plugins
@@ -36,8 +36,6 @@ function plugin_init_mailbehaviours() {
    global $PLUGIN_HOOKS;
 
    Plugin::registerClass('PluginMailBehaviours');
-
-   $PLUGIN_HOOKS['csrf_compliant']['mailbehaviours'] = true;
 
    $PLUGIN_HOOKS['pre_item_add']['mailbehaviours'] = [
       'Ticket'       => ['PluginMailBehaviours', 'plugin_pre_item_add_mailbehaviours'],
@@ -79,7 +77,7 @@ function plugin_version_mailbehaviours() {
  */
 function plugin_mailbehaviours_check_prerequisites() {
    if (version_compare(GLPI_VERSION, PLUGIN_MAILBEHAVIOURS_MIN_GLPI, 'lt')
-       && version_compare(GLPI_VERSION, PLUGIN_MAILBEHAVIOURS_MAX_GLPI, 'ge')) {
+       || version_compare(GLPI_VERSION, PLUGIN_MAILBEHAVIOURS_MAX_GLPI, 'gt')) {
       echo "This plugin requires GLPI >= " . PLUGIN_MAILBEHAVIOURS_MIN_GLPI . "and < " . PLUGIN_MAILBEHAVIOURS_MAX_GLPI;
       return false;
    } else {

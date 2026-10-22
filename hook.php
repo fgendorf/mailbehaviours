@@ -26,8 +26,6 @@ along with this plugin. If not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------------
  */
 
-use Glpi\Toolbox\Sanitizer;
-
 
 /**
  * Summary of plugin_mailbehaviours_install
@@ -84,7 +82,7 @@ class PluginMailBehaviours {
     * @return string bare text
     */
    public static function getTextFromHtml($str) {
-      $ret = Sanitizer::decodeHtmlSpecialChars($str);
+      $ret = (string) $str; // GLPI 11: input is no longer HTML-encoded/sanitized
       $ret = preg_replace("/<(p|br|div|tr)( [^>]*)?".">/i", "\n", $ret);
       $ret = preg_replace("/(&nbsp;| |\xC2\xA0)+/", " ", $ret);
       $ret = strip_tags($ret);
@@ -119,8 +117,8 @@ class PluginMailBehaviours {
             if (isset($match['email'])) {
                $where = ['glpi_useremails.email' => trim($match['email'])];
             } elseif (isset($match['last']) && isset($match['first'])) {
-               $where = ['AND' => ['glpi_users.realname'         => $DB->escape(trim($match['last'])),
-                                    'glpi_users.firstname'        => $DB->escape(trim($match['first'])),
+               $where = ['AND' => ['glpi_users.realname'         => trim($match['last']),
+                                    'glpi_users.firstname'        => trim($match['first']),
                                     'glpi_useremails.is_default'  => 1
                                     ]];
             } else {
